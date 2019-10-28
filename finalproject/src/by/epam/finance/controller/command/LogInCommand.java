@@ -2,7 +2,7 @@ package by.epam.finance.controller.command;
 
 import by.epam.finance.service.LogInService;
 
-import static by.epam.finance.controller.Controller.PARAM_DELIMETER;
+import static by.epam.finance.controller.FinController.PARAM_DELIMETER;
 
 public class LogInCommand implements Command {
 

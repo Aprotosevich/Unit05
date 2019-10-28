@@ -4,7 +4,7 @@ package by.epam.finance.controller.command;
 import by.epam.finance.bean.User;
 import by.epam.finance.service.UserService;
 
-import static by.epam.finance.controller.Controller.PARAM_DELIMETER;
+import static by.epam.finance.controller.FinController.PARAM_DELIMETER;
 
 public class CreateUserCommand implements Command {
 

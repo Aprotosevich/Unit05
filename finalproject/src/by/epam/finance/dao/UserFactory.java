@@ -1,11 +1,12 @@
 package by.epam.finance.dao;
 
 import by.epam.finance.bean.User;
-import by.epam.finance.dao.impl.UserDaoImpl;
 
-import java.io.IOException;
+import java.util.logging.Logger;
 
 public class UserFactory {
+
+    private static Logger log = Logger.getLogger("UserFactorry Logger");
 
     private static final UserFactory userFactory = new UserFactory();
 
@@ -15,16 +16,25 @@ public class UserFactory {
         return userFactory;
     };
 
-    public UserDaoImpl takeUser(String login) {
-        return null;
-    }
-
     public boolean saveUser(User user){
-            String fileName = user.getLogin();
-            DBSerialize dbSerialize = new DBSerialize();
-            dbSerialize.save(user, fileName);
+            DBSerialize dbSerialize = new DBSerialize(user.getLogin());
+        try {
+            dbSerialize.save(user);
             return true;
+        } catch (DaoException e) {
+            log.warning("Exception in save User");
+            return false;
+        }
     }
 
+    public User takeUserByLogin(String login){
+        DBSerialize dbSerialize = new DBSerialize(login);
+        try {
+            return dbSerialize.takeUserByLogin(login);
+        } catch (DaoException e) {
+            log.warning("Exception in taking User from Base");
+            return null;
+        }
+    }
 }
 

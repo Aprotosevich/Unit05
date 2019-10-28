@@ -1,13 +1,8 @@
 package by.epam.finance.service;
 
 import by.epam.finance.bean.User;
-import by.epam.finance.dao.DBReader;
-import by.epam.finance.dao.UserDao;
-import by.epam.finance.dao.impl.UserDaoImpl;
-
-import java.io.FileNotFoundException;
-
-import static by.epam.finance.controller.Controller.PARAM_DELIMETER;
+import by.epam.finance.dao.DBSerialize;
+import by.epam.finance.dao.DaoException;
 
 public class LogInService {
 
@@ -20,21 +15,20 @@ public class LogInService {
     }
 
     public boolean logIn(String login, String password) {
+        DBSerialize dbSerialize = new DBSerialize(login);
+        User user;
         try {
-            DBReader dbReader = new DBReader();
-            String input = "";
-            while ((input = dbReader.readOneLine()) != null) {
-                String[] inputArray = input.split(PARAM_DELIMETER + "");
-                if(inputArray[0].equals(login)) {
-                    if(inputArray[1].equals(password)){
-                        return true;
-                    }
-                }
+            user = dbSerialize.takeUserByLogin(login);
+            if(user != null && user.getPassword().equals(password)){
+                user.setLogged(true);
+                dbSerialize.save(user);
+                return true;
             }
-        } catch (Exception e) {
+            else return false;
+        } catch (DaoException e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
 
